@@ -91,7 +91,7 @@
   };
   //   Main
   const STUDENT_LOCALSTORAGE = "STUDENT-MANAGE";
-  let config = JSON.parse(localStorage.getItem(STUDENT_LOCALSTORAGE)) || null;
+  let config = JSON.parse(localStorage.getItem(STUDENT_LOCALSTORAGE)) || {};
   // Object Constructor
   function Student(name, id, age, gender) {
     this.name = name;
