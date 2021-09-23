@@ -301,7 +301,9 @@
   }
   // Chạy chương trình
   function run() {
-    typeof config === "object" && (students = config?.student);
+    if (config?.student) {
+      typeof config === "object" && (students = config?.student);
+    }
     console.log(students);
     console.log(config.student);
     students.sort((a, b) => a.id - b.id);
