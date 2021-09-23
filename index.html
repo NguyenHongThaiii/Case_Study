@@ -75,6 +75,7 @@
 <script>
   const $ = document.querySelector.bind(document);
   const $$ = document.querySelectorAll.bind(document);
+
   // Validator
   const validator = new Validator("#form-1");
   const main = $(".main");
@@ -87,8 +88,11 @@
       main.classList.add("show");
       validation.classList.add("hide");
       console.log(JSON.stringify(data) + JSON.stringify(`đã đăng nhập`));
+    } else {
+      alert("Email or password not valid");
     }
   };
+
   //   Main
   const STUDENT_LOCALSTORAGE = "STUDENT-MANAGE";
   let config = JSON.parse(localStorage.getItem(STUDENT_LOCALSTORAGE)) || {};
@@ -99,6 +103,7 @@
     this.age = age;
     this.gender = gender;
   }
+
   // array
   let students = [];
   const renderContent = $(".content");
@@ -108,14 +113,13 @@
   students.push(new Student("Nguyễn Hồng Thái", 7, 20, "Nam"));
   students.push(new Student("Nguyễn Hồng Thái", 5, 20, "Nam"));
   students.push(new Student("Nguyễn Hồng Thái", 6, 20, "Nam"));
-  console.log(students);
   // function
-
   // set config student
   function setConfig(key, value) {
     config[key] = value;
     localStorage.setItem(STUDENT_LOCALSTORAGE, JSON.stringify(config));
   }
+
   // Handel render Student
   function renderStudents() {
     // document.body.innerHTML=''
@@ -141,6 +145,7 @@
     res += "<div>";
     renderContent.innerHTML = res;
   }
+
   // BTN Add Student
   function addStudent() {
     const res = `
@@ -161,6 +166,7 @@
         `;
     renderContent.innerHTML = res;
   }
+
   // Handel Create Student
   function createStudent() {
     const count = 0;
@@ -184,6 +190,7 @@
     setConfig("student", students);
     run();
   }
+
   // Handel xóa student
   function delStudent(index) {
     if (
@@ -196,18 +203,19 @@
       run();
     }
   }
+
   // BTN chỉnh sửa thông tin student
   function editStudent(index) {
     const res = `
         <div class="wrap-formCreate">
                 <label for="name">Name:</label>
-                <input type="text" id="name" value=${students[index].name}>
+                <input type="text" id="name" value='${students[index].name}'>
                 <label for="mssv">Id:</label>
-                <input type="text" id="mssv">
+                <input type="text" id="mssv" value=${students[index].id}>
                 <label for="age">Age:</label>
-                <input type="text" id="age">
+                <input type="text" id="age" value=${students[index].age}>
                 <label for="gender">Gender:</label>
-                <input type="text" id="gender">
+                <input type="text" id="gender" value=${students[index].gender}>
                 <div>
                     <button class="Btn" onclick='create(${index})'>Hoàn Tất</button>
                     <button class="Btn" onclick='home()'>Trang chủ</button>
@@ -216,6 +224,7 @@
         `;
     renderContent.innerHTML = res;
   }
+
   // Handel đổi mới student of Edit
   function create(index) {
     const count = 0;
@@ -241,6 +250,7 @@
     setConfig("student", students);
     run();
   }
+
   // BTN tìm kiếm student theo ID
   function findStudentById() {
     const res = `
@@ -255,6 +265,7 @@
             `;
     renderContent.innerHTML = res;
   }
+
   // Handel tìm kiếm student theo ID
   function find() {
     const mssv = $("#mssv").value;
@@ -295,10 +306,12 @@
                     `;
     renderContent.innerHTML = res;
   }
+
   // Handel trở về trang chủ
   function home() {
     run();
   }
+
   // Chạy chương trình
   function run() {
     if (config?.student) {
