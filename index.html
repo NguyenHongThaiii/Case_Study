@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="main">
+      <div class="wrap">
+        <h1>Danh sách sinh viên K46</h1>
+        <table style="width: 100%; margin-bottom: 20px">
+          <tr>
+            <td colspan="6" class="table-heading">Trường Đại Học Nông Lâm</td>
+          </tr>
+          <tr>
+            <td colspan="6" class="table-heading">Khoa công nghệ thông tin</td>
+          </tr>
+          <tr>
+            <td colspan="6" class="table-heading">Ngày 20 Tháng 8 Năm 2021</td>
+          </tr>
+        </table>
+        <table class="wrap__heading">
+          <tr>
+            <th>Tên sinh viên</th>
+            <th>Mã số sinh viên</th>
+            <th>Lớp</th>
+            <th>Giới tính</th>
+            <th>Thao tác</th>
+          </tr>
+        </table>
+      </div>
+      <div class="content"></div>
+    </div>
+    <div class="formValidation">
+      <form action="" method="POST" class="form" id="form-1">
+        <h3 class="heading">Đăng nhập</h3>
+        <p class="desc">Tài khoản chỉ dành cho giảng viên NLU ❤️</p>
+        <div class="spacer"></div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            id="email"
+            name="email"
+            rules="required|email"
+            type="text"
+            placeholder="VD: email@domain.com"
+            class="form-control"
+          />
+          <span class="form-message"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Mật khẩu</label>
+          <input
+            id="password"
+            name="password"
+            rules="required|min:6"
+            type="password"
+            placeholder="Nhập mật khẩu"
+            class="form-control"
+          />
+          <span class="form-message"></span>
+        </div>
+        <button class="form-submit">Đăng ký</button>
+      </form>
+    </div>
+  </body>
+</html>
+<script src="FormValidation2/form2.js"></script>
+<script>
+  const $ = document.querySelector.bind(document);
+  const $$ = document.querySelectorAll.bind(document);
+  // Validator
+  const validator = new Validator("#form-1");
+  const main = $(".main");
+  const validation = $(".formValidation");
+  validator.onSubmit = function (data) {
+    if (
+      $("#password").value === "123456" &&
+      $("#email").value === "thai123@gmail.com"
+    ) {
+      main.classList.add("show");
+      validation.classList.add("hide");
+      console.log(JSON.stringify(data) + JSON.stringify(`đã đăng nhập`));
+    }
+  };
+  //   Main
+  const STUDENT_LOCALSTORAGE = "STUDENT-MANAGE";
+  let config = JSON.parse(localStorage.getItem(STUDENT_LOCALSTORAGE)) || null;
+  // Object Constructor
+  function Student(name, id, age, gender) {
+    this.name = name;
+    this.id = id;
+    this.age = age;
+    this.gender = gender;
+  }
+  // array
+  let students = [];
+  const renderContent = $(".content");
+  students.push(new Student("Nguyễn Hồng Thái", 1, 20, "Nam"));
+  students.push(new Student("Nguyễn Hồng Thái", 2, 20, "Nam"));
+  students.push(new Student("Nguyễn Hồng Thái", 3, 20, "Nam"));
+  students.push(new Student("Nguyễn Hồng Thái", 7, 20, "Nam"));
+  students.push(new Student("Nguyễn Hồng Thái", 5, 20, "Nam"));
+  students.push(new Student("Nguyễn Hồng Thái", 6, 20, "Nam"));
+  console.log(students);
+  // function
+
+  // set config student
+  function setConfig(key, value) {
+    config[key] = value;
+    localStorage.setItem(STUDENT_LOCALSTORAGE, JSON.stringify(config));
+  }
+  // Handel render Student
+  function renderStudents() {
+    // document.body.innerHTML=''
+    let res = '<table class="content__students">';
+    for (let i = 0; i < students.length; i++) {
+      res += `
+            <tr class="content__students-row">
+                <td>${students[i].name}</td> 
+                <td>${students[i].id}</td> 
+                <td>${students[i].age}</td> 
+                <td>${students[i].gender}</td> 
+                <td><button class="Btn ${i}" onclick="delStudent(${i})">Xóa</button>                    
+                    <button class="Btn" onclick="editStudent(${i})">Edit</button></td>                    
+            <tr>
+            `;
+    }
+    res += "</table>";
+    res += '<div class="wrap-Btn">';
+    res +=
+      '<button class="addBtn Btn" onclick="addStudent()">Thêm sinh viên</button>';
+    res +=
+      '<button class="findBtn Btn" onclick="findStudentById()">Tìm sinh viên</button>';
+    res += "<div>";
+    renderContent.innerHTML = res;
+  }
+  // BTN Add Student
+  function addStudent() {
+    const res = `
+        <div class="wrap-formCreate">
+                <label for="name">Name:</label>
+                <input type="text" id="name">
+                <label for="mssv">Id:</label>
+                <input type="text" id="mssv">
+                <label for="age">Age:</label>
+                <input type="text" id="age">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender">
+                <div>
+                    <button class="Btn" onclick='createStudent()'>Tạo</button>
+                    <button class="Btn" onclick='home()'>Trang chủ</button>
+                </div> 
+        </div>
+        `;
+    renderContent.innerHTML = res;
+  }
+  // Handel Create Student
+  function createStudent() {
+    const count = 0;
+    const name = $("#name").value;
+    const mssv = $("#mssv").value;
+    const age = $("#age").value;
+    const gender = $("#gender").value;
+    for (let i = 0; i < students.length; i++) {
+      if (name == "" || mssv == "" || age == "" || gender == "") {
+        alert("Mời bạn nhập đầy đủ thông tin");
+        count++;
+      }
+      if (mssv == students[i].id) {
+        alert("Mã số sinh viên đã trung xin mời nhập lại");
+        count++;
+      }
+    }
+    if (count < 1) {
+      students.push(new Student(name, mssv, age, gender));
+    }
+    setConfig("student", students);
+    run();
+  }
+  // Handel xóa student
+  function delStudent(index) {
+    if (
+      confirm(
+        `Bạn có chắc muốn xóa sinh viên với mã số sinh viên ${students[index].id} này không?`
+      )
+    ) {
+      students.splice(index, 1);
+      setConfig("student", students);
+      run();
+    }
+  }
+  // BTN chỉnh sửa thông tin student
+  function editStudent(index) {
+    const res = `
+        <div class="wrap-formCreate">
+                <label for="name">Name:</label>
+                <input type="text" id="name" value=${students[index].name}>
+                <label for="mssv">Id:</label>
+                <input type="text" id="mssv">
+                <label for="age">Age:</label>
+                <input type="text" id="age">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender">
+                <div>
+                    <button class="Btn" onclick='create(${index})'>Hoàn Tất</button>
+                    <button class="Btn" onclick='home()'>Trang chủ</button>
+                </div>
+        </div>
+        `;
+    renderContent.innerHTML = res;
+  }
+  // Handel đổi mới student of Edit
+  function create(index) {
+    const count = 0;
+    const name = $("#name").value;
+    const mssv = $("#mssv").value;
+    const age = $("#age").value;
+    const gender = $("#gender").value;
+    for (let i = 0; i < students.length; i++) {
+      if (name == "" || mssv == "" || age == "" || gender == "") {
+        alert("Mời bạn nhập đầy đủ thông tin");
+        count++;
+        break;
+      }
+      if (mssv == students[i].id && mssv != index + 1) {
+        alert("Mã số sinh viên đã trung xin mời nhập lại");
+        count++;
+        break;
+      }
+    }
+    if (count < 1) {
+      students[index] = new Student(name, mssv, age, gender);
+    }
+    setConfig("student", students);
+    run();
+  }
+  // BTN tìm kiếm student theo ID
+  function findStudentById() {
+    const res = `
+            <div class="wrap-formCreate">
+                <form class="wrap-inputCreate">
+                    <label for="mssv">Id:</label>
+                    <input type="text" id="mssv">
+                    <button class="Btn" onclick='find()'>Tìm</button>
+                    <button class="Btn" onclick='home()'>Trang chủ</button>
+                </form>
+            </div>
+            `;
+    renderContent.innerHTML = res;
+  }
+  // Handel tìm kiếm student theo ID
+  function find() {
+    const mssv = $("#mssv").value;
+    let count = 0;
+    let res = '<table class="content__students">';
+    for (let i = 0; i < students.length; i++) {
+      if (students[i].id == mssv) {
+        res += `
+                <tr class="content__students-row">
+                    <td>${students[i].name}</td> 
+                    <td>${students[i].id}</td> 
+                    <td>${students[i].age}</td> 
+                    <td>${students[i].gender}</td>
+                    <td><button class="Btn ${i}" onclick="delStudent(${i})">Xóa</button>                    
+                    <button class="Btn" onclick="editStudent(${i})">Edit</button></td>
+                </tr>
+                `;
+        break;
+      } else {
+        count++;
+        // continue;
+      }
+    }
+    if (count == students.length) {
+      alert("Không có sinh viên này");
+    }
+    // res += '</table> </br>'
+    res += `
+            </table>        
+            <div class="wrap-formCreate">
+                <form class="wrap-inputCreate">
+                    <label for="mssv">Id:</label>
+                    <input type="text" id="mssv">
+                    <button class="Btn" onclick='find()'>Tìm</button>
+                    <button class="Btn" onclick='home()'>Trang chủ</button>
+                </form>
+            </div>
+                    `;
+    renderContent.innerHTML = res;
+  }
+  // Handel trở về trang chủ
+  function home() {
+    run();
+  }
+  // Chạy chương trình
+  function run() {
+    typeof config === "object" && (students = config.student);
+    console.log(students);
+    console.log(config.student);
+    students.sort((a, b) => a.id - b.id);
+    renderStudents();
+  }
+  run();
+</script>
